@@ -2,207 +2,155 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Important Question ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinematic</title>
 
 <style>
-body{
-  font-family: Arial, sans-serif;
-  text-align:center;
-  background: linear-gradient(120deg,#ffdde1,#ee9ca7);
-  height:100vh;
-  margin:0;
-  overflow:hidden;
-  transition:0.6s;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: black;
+    color: white;
+    overflow: hidden;
 }
 
-/* Fade */
-.fade{ animation:fadeIn 0.6s ease; }
-@keyframes fadeIn{
- from{opacity:0; transform:scale(0.96);}
- to{opacity:1; transform:scale(1);}
+/* Hidden background photo */
+#bgPhoto {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 1.5s ease;
 }
 
-h1{
-  margin-top:80px;
-  font-size:32px;
-  color:#fff;
-  text-shadow:0 2px 8px rgba(0,0,0,0.3);
+/* Center container */
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
-button{
-  padding:12px 26px;
-  font-size:18px;
-  border:none;
-  border-radius:8px;
-  cursor:pointer;
-  margin:15px;
+/* Text */
+#message {
+    font-size: 26px;
+    margin-bottom: 25px;
 }
 
-#yesBtn{ background:#4CAF50; color:white; }
-#noBtn{ background:#f44336; color:white; }
-
-/* Popup */
-#popup{
-  display:none;
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:white;
-  padding:30px;
-  border-radius:14px;
-  box-shadow:0 0 30px rgba(0,0,0,0.35);
-  max-width:380px;
+/* Buttons */
+button {
+    padding: 12px 30px;
+    margin: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-/* Hearts */
-.heart{
-  position:fixed;
-  color:#ff4d6d;
-  font-size:18px;
-  animation:fall linear infinite;
+#yesBtn {
+    background: #00c853;
+    color: white;
 }
-@keyframes fall{
-  0%{transform:translateY(-10vh);}
-  100%{transform:translateY(110vh);}
+
+#noBtn {
+    background: #d50000;
+    color: white;
 }
 </style>
 </head>
 
-<body class="fade">
+<body>
 
-<h1 id="question">Will you marry me? ❤️</h1>
+<!-- Your Photo (place image file in same folder) -->
+<img id="bgPhoto" src="photo.jpg">
 
-<button id="yesBtn" onclick="yesClick()">Yes</button>
-<button id="noBtn" onclick="noClick()">No</button>
-
-<div id="popup">
-<h2>😄 GOTCHA ❤️</h2>
-<p id="popupText" style="font-size:18px; line-height:1.6;"></p>
-<button onclick="closePopup()">Close</button>
-</div>
-
-<audio id="bgMusic" loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6c5d0c1e9b.mp3" type="audio/mpeg">
+<!-- Music -->
+<audio id="music" loop>
+    <source src="music.mp3" type="audio/mp3">
 </audio>
+
+<div class="container">
+
+    <div id="message">I want to ask you something...</div>
+
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+
+</div>
 
 <script>
 
-let yesCount=0,noIndex=0,jumpCount=0,finalStage=false,musicStarted=false;
+let step = 0;
 
-const noTexts=[
-"Are you sure? 😢",
-"Really sure? 🥺",
-"Think again 💭",
-"Last chance 😭",
-"Still NO? 💔",
-"Okay... now final decision 😏"
-];
+const msg = document.getElementById("message");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const bgPhoto = document.getElementById("bgPhoto");
+const music = document.getElementById("music");
 
-const finalMessage=`Relax... not today 😌
+/* Popup first */
+window.onload = () => {
+    setTimeout(() => {
+        alert("A small question for you...");
+    }, 600);
+};
 
-This was just a tiny prank 😄
-But remember this moment... because one day (maybe 2 years later 😉)
-I might actually ask this for real 💍
+/* Start music on first tap (mobile safe) */
+document.body.addEventListener("click", () => {
+    music.play().catch(()=>{});
+}, { once: true });
 
-Until then… stay with me, laugh with me,
-and keep making beautiful memories together ❤️
+/* YES flow */
+yesBtn.onclick = () => {
 
-Happy Valentine's Day 💖
-You mean a lot to me ✨`;
+    step++;
 
-function startMusic(){
- if(!musicStarted){
-  document.getElementById("bgMusic").play().catch(()=>{});
-  musicStarted=true;
- }
-}
+    if(step == 1){
+        msg.innerText = "Are you sure?";
+    }
+    else if(step == 2){
+        msg.innerText = "Think again...";
+    }
+    else if(step == 3){
+        msg.innerText = "Last chance...";
+    }
+    else {
 
-function randomMove(btn){
- let x=Math.random()*(window.innerWidth-120);
- let y=Math.random()*(window.innerHeight-120);
- btn.style.position="absolute";
- btn.style.left=x+"px";
- btn.style.top=y+"px";
-}
+        /* Show photo only now */
+        bgPhoto.style.opacity = "0.35";
 
-function yesClick(){
- startMusic();
+        /* Final popup */
+        setTimeout(() => {
+            alert("Gotcha. Relax... not today. Just a tiny prank. But remember this moment. One day, maybe two years later, I might ask this for real. Until then, stay with me and keep smiling.");
+        }, 500);
 
- if(finalStage){ showPopup(); return; }
+        msg.innerText = "You chose YES.";
+        yesBtn.style.display = "none";
+        noBtn.style.display = "none";
+    }
+};
 
- // 😈 Fake confusion 20% chance
- if(Math.random()<0.2){
-  document.getElementById("question").innerHTML="Wait... did you press NO? 😏";
- }
+/* NO flow */
+noBtn.onclick = () => {
 
- yesCount++; noIndex=0;
+    step--;
 
- if(jumpCount<10){
-  randomMove(document.getElementById("yesBtn"));
-  jumpCount++;
- }
-
- if(yesCount>=10) showPopup();
-}
-
-function noClick(){
- startMusic();
- if(finalStage) return;
-
- yesCount=0;
-
- if(noIndex<noTexts.length){
-  document.getElementById("question").innerHTML=noTexts[noIndex];
-  noIndex++;
- }else goFinal();
-}
-
-function goFinal(){
- finalStage=true;
- document.getElementById("question").innerHTML="Now choose carefully 😏";
- yesBtn.style.position="static";
- noBtn.style.position="static";
-}
-
-function showPopup(){
- document.getElementById("popup").style.display="block";
- typeText();
- createHearts();
-}
-
-function closePopup(){
- document.getElementById("popup").style.display="none";
-}
-
-function typeText(){
- let i=0;
- let speed=30;
- let text=finalMessage;
- let target=document.getElementById("popupText");
- target.innerHTML="";
-
- function typing(){
-  if(i<text.length){
-   target.innerHTML+=text.charAt(i);
-   i++;
-   setTimeout(typing,speed);
-  }
- }
- typing();
-}
-
-function createHearts(){
- for(let i=0;i<30;i++){
-  let heart=document.createElement("div");
-  heart.className="heart";
-  heart.innerHTML="💖";
-  heart.style.left=Math.random()*100+"vw";
-  heart.style.animationDuration=(3+Math.random()*3)+"s";
-  document.body.appendChild(heart);
- }
-}
+    if(step <= 0){
+        step = 0;
+        msg.innerText = "I want to ask you something...";
+    }
+    else if(step == 1){
+        msg.innerText = "Not sure?";
+    }
+    else if(step == 2){
+        msg.innerText = "Still thinking?";
+    }
+};
 
 </script>
+
 </body>
 </html>
