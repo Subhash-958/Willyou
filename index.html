@@ -1,18 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Marry Me ❤️</title>
+
+<style>
+body{
+    text-align:center;
+    font-family:Arial, sans-serif;
+    background:#ffe6f0;
+    margin-top:100px;
+}
+h1{font-size:36px;}
+
+button{
+    padding:12px 22px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* YES small */
+#yes{
+    background:#ff4d6d;
+    color:white;
+    font-size:8px;
+}
+
+/* NO big */
+#no{
+    background:#333;
+    color:white;
+    font-size:28px;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="question">Will you marry me? ❤️</h1>
+
+<button id="yes">Yes</button>
+<button id="no">No</button>
+
 <script>
 let step = 0;
 
-/* YES jumps when clicked (before final only) */
-function jumpYes() {
+/* YES jumps when clicked (before final) */
+function jumpYes(){
     const y = document.getElementById("yes");
-    y.style.position = "absolute";
-    y.style.left = Math.random() * (window.innerWidth - 120) + "px";
-    y.style.top = Math.random() * (window.innerHeight - 120) + "px";
+    y.style.position="absolute";
+    y.style.left=Math.random()*(window.innerWidth-120)+"px";
+    y.style.top =Math.random()*(window.innerHeight-120)+"px";
 }
 
-/* NO button logic */
-document.getElementById("no").addEventListener("click", function () {
+/* NO click */
+document.getElementById("no").addEventListener("click", function(){
 
-    const msgs = [
+    const msgs=[
         "Are you sure? 😢",
         "Really sure? 🥺",
         "Think again 💭",
@@ -21,36 +66,34 @@ document.getElementById("no").addEventListener("click", function () {
         "Final decision ❤️"
     ];
 
-    if (step < msgs.length) {
+    if(step < msgs.length){
         document.getElementById("question").innerText = msgs[step];
         step++;
-    } else {
-        /* FINAL STEP → BOTH buttons normal size */
-        document.getElementById("question").innerText =
-            "Now choose carefully ❤️";
+    }else{
+        /* FINAL → BOTH buttons normal */
+        document.getElementById("question").innerText="Now choose carefully ❤️";
 
-        const y = document.getElementById("yes");
-        const n = document.getElementById("no");
+        const y=document.getElementById("yes");
+        const n=document.getElementById("no");
 
-        y.style.position = "static";
-        n.style.position = "static";
+        y.style.position="static";
+        n.style.position="static";
 
-        y.style.fontSize = "20px";
-        n.style.fontSize = "20px";
+        y.style.fontSize="20px";
+        n.style.fontSize="20px";
     }
 });
 
 /* YES click */
-document.getElementById("yes").addEventListener("click", function () {
+document.getElementById("yes").addEventListener("click", function(){
 
-    /* Before final → just jump */
-    if (step < 6) {
-        jumpYes();
+    if(step < 6){
+        jumpYes();   /* jump only before final */
         return;
     }
 
-    /* FINAL YES → show popup */
-    document.body.innerHTML = `
+    /* FINAL YES → popup */
+    document.body.innerHTML=`
         <h1 style="color:#ff1a4d;">❤️ SHE SAID YES ❤️</h1>
         <h2>Happy Valentine's Day 💖</h2>
         <p>You made me the happiest person alive 😍</p>
@@ -58,3 +101,6 @@ document.getElementById("yes").addEventListener("click", function () {
     `;
 });
 </script>
+
+</body>
+</html>
