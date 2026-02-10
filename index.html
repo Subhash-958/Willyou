@@ -27,23 +27,14 @@ button {
 #yes {
     background: #ff4d6d;
     color: white;
-    font-size: 7px;   /* VERY SMALL */
+    font-size: 5px;   /* VERY VERY SMALL */
+    position: absolute;
 }
 
 #no {
     background: #333;
     color: white;
     font-size: 30px;
-}
-.heart {
-    position: fixed;
-    color: red;
-    font-size: 20px;
-    animation: floatUp 3s linear infinite;
-}
-@keyframes floatUp {
-    from { transform: translateY(0); opacity: 1; }
-    to { transform: translateY(-800px); opacity: 0; }
 }
 </style>
 </head>
@@ -52,21 +43,21 @@ button {
 
 <h1 id="question">Will you marry me? ❤️</h1>
 
-<button id="yes" onclick="yesFake()">Yes</button>
+<button id="yes" onclick="yesClick()">Yes</button>
 <button id="no" onclick="noClick()">No</button>
-
-<audio id="music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
 <script>
 let step = 0;
 
-function yesFake() {
-    // YES secretly triggers NO
-    document.getElementById("question").innerText =
-        "Wait... you pressed YES 😳 but it shows NO 😭";
-
-    setTimeout(noClick, 800);
+// YES button keeps jumping
+function moveYes() {
+    let yesBtn = document.getElementById("yes");
+    yesBtn.style.left = Math.random() * (window.innerWidth - 80) + "px";
+    yesBtn.style.top = Math.random() * (window.innerHeight - 80) + "px";
 }
+
+// Move YES continuously
+setInterval(moveYes, 800);
 
 function noClick() {
     step++;
@@ -75,52 +66,26 @@ function noClick() {
         "Are you sure? 😢",
         "Really sure? 🥺",
         "Think again 💭",
-        "You pressed YES right? Then why NO? 😭",
-        "System error maybe 😶 Try again ❤️",
-        "Okay... last decision 💍"
+        "Last chance 😭",
+        "Still NO? 💔",
+        "Okay... final choice ❤️"
     ];
 
     if (step < questions.length) {
         document.getElementById("question").innerText = questions[step];
-        growYes();
-        moveNo();
     } else {
+        // FINAL STEP
         document.getElementById("no").style.display = "none";
         document.getElementById("question").innerText =
-            "Now only YES remains ❤️ Choose wisely";
-        growYes();
+            "Only YES remains ❤️";
+
+        // Make YES normal size and stop jumping
+        document.getElementById("yes").style.fontSize = "20px";
+        clearInterval();
     }
 }
 
-function growYes() {
-    let yesBtn = document.getElementById("yes");
-    let currentSize = window.getComputedStyle(yesBtn).fontSize;
-    yesBtn.style.fontSize = (parseFloat(currentSize) + 8) + "px";
-}
-
-function moveNo() {
-    let noBtn = document.getElementById("no");
-    noBtn.style.position = "absolute";
-    noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
-    noBtn.style.top = Math.random() * (window.innerHeight - 100) + "px";
-}
-
-function celebrate() {
-    document.getElementById("music").play();
-
-    setInterval(() => {
-        let heart = document.createElement("div");
-        heart.className = "heart";
-        heart.innerHTML = "❤️";
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.bottom = "0px";
-        document.body.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 3000);
-    }, 200);
-}
-
-document.getElementById("yes").addEventListener("click", function() {
+function yesClick() {
     if (step >= 6) {
         document.body.innerHTML = `
             <h1 style="color:#ff1a4d;">❤️ SHE SAID YES ❤️</h1>
@@ -128,9 +93,8 @@ document.getElementById("yes").addEventListener("click", function() {
             <p>You made me the happiest person alive 😍</p>
             <p>Forever starts now 💍✨</p>
         `;
-        celebrate();
     }
-});
+}
 </script>
 
 </body>
