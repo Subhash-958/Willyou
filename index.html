@@ -1,53 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Will You Marry Me ❤️</title>
-
-<style>
-body {
-    text-align: center;
-    font-family: Arial, sans-serif;
-    background: #ffe6f0;
-    margin-top: 100px;
-    overflow: hidden;
-}
-
-h1 {
-    font-size: 38px;
-}
-
-button {
-    padding: 15px 25px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-#yes {
-    background: #ff4d6d;
-    color: white;
-    font-size: 5px;   /* VERY VERY SMALL */
-    position: absolute;
-}
-
-#no {
-    background: #333;
-    color: white;
-    font-size: 30px;
-}
-</style>
-</head>
-
-<body>
-
-<h1 id="question">Will you marry me? ❤️</h1>
-
-<button id="yes" onclick="yesClick()">Yes</button>
-<button id="no" onclick="noClick()">No</button>
-
 <script>
 let step = 0;
+let moveInterval;
 
 // YES button keeps jumping
 function moveYes() {
@@ -56,8 +9,8 @@ function moveYes() {
     yesBtn.style.top = Math.random() * (window.innerHeight - 80) + "px";
 }
 
-// Move YES continuously
-setInterval(moveYes, 800);
+// Start jumping
+moveInterval = setInterval(moveYes, 800);
 
 function noClick() {
     step++;
@@ -76,12 +29,15 @@ function noClick() {
     } else {
         // FINAL STEP
         document.getElementById("no").style.display = "none";
-        document.getElementById("question").innerText =
-            "Only YES remains ❤️";
+        document.getElementById("question").innerText = "Only YES remains ❤️";
 
-        // Make YES normal size and stop jumping
-        document.getElementById("yes").style.fontSize = "20px";
-        clearInterval();
+        // Make YES normal size
+        let yesBtn = document.getElementById("yes");
+        yesBtn.style.fontSize = "20px";
+        yesBtn.style.position = "static";
+
+        // STOP jumping properly
+        clearInterval(moveInterval);
     }
 }
 
@@ -96,6 +52,3 @@ function yesClick() {
     }
 }
 </script>
-
-</body>
-</html>
