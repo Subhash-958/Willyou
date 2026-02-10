@@ -40,6 +40,7 @@ button{
   padding:30px;
   border-radius:12px;
   box-shadow:0 0 20px rgba(0,0,0,0.3);
+  max-width:350px;
 }
 </style>
 </head>
@@ -51,45 +52,26 @@ button{
 <button id="yesBtn" onclick="yesClick()">Yes</button>
 <button id="noBtn" onclick="noClick()">No</button>
 
-document.body.innerHTML = `
-<div style="
-    display:flex;
-    height:100vh;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#ff4d6d,#ff9a9e);
-    color:white;
-    font-family:Arial, sans-serif;
-    text-align:center;
-    flex-direction:column;
-    padding:20px;
-">
+<!-- POPUP (hidden initially) -->
+<div id="popup">
+<h2>😄 GOTCHA ❤️</h2>
 
-    <h1 style="font-size:44px; margin-bottom:10px;">
-        😂 GOT YOU ❤️
-    </h1>
+<p style="font-size:18px; line-height:1.6;">
+Relax... not today 😌<br><br>
 
-    <h2 style="font-size:26px; margin-bottom:20px;">
-        Relax... not today 😌
-    </h2>
+This was just a tiny prank 😄<br>
+But remember this moment... because <b>one day (maybe 2 years later 😉)</b><br>
+I might actually ask this for real 💍<br><br>
 
-    <p style="font-size:21px; max-width:520px; line-height:1.5;">
-        This was just a tiny prank 😄  
-        But remember this moment... because **one day (maybe 2 years later 😉)**  
-        I might actually ask this for real 💍  
-        <br><br>
-        Until then… just stay with me, laugh with me,  
-        and keep making beautiful memories together ❤️
-    </p>
+Until then… just stay with me, laugh with me,<br>
+and keep making beautiful memories together ❤️<br><br>
 
-    <p style="font-size:20px; margin-top:25px;">
-        Happy Valentine's Day 💖  
-        <br>
-        You mean a lot to me ✨
-    </p>
+<b>Happy Valentine's Day 💖</b><br>
+You mean a lot to me ✨
+</p>
 
+<button onclick="closePopup()">Close</button>
 </div>
-`;
 
 <script>
 
