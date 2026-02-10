@@ -2,97 +2,90 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Will You Marry Me?</title>
+<title>Will You Marry Me ❤️</title>
 
 <style>
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  margin-top: 100px;
-  background: #ffe6f0;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    background: #ffe6f0;
+    margin-top: 100px;
 }
 
 h1 {
-  font-size: 40px;
+    font-size: 40px;
 }
 
 button {
-  cursor: pointer;
-  border: none;
-  border-radius: 10px;
-  transition: 0.3s;
+    padding: 15px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-#yesBtn {
-  background: #4CAF50;
-  color: white;
-  padding: 5px 10px;
-  font-size: 12px;
+#yes {
+    background: #ff4d6d;
+    color: white;
+    font-size: 8px;   /* VERY SMALL at start */
 }
 
-#noBtn {
-  background: #f44336;
-  color: white;
-  padding: 20px 40px;
-  font-size: 24px;
-  margin-left: 20px;
+#no {
+    background: #444;
+    color: white;
+    font-size: 30px;
 }
 </style>
 </head>
 
 <body>
 
-<h1 id="question">Will you marry me? 💍</h1>
+<h1 id="question">Will you marry me? ❤️</h1>
 
-<button id="yesBtn">Yes</button>
-<button id="noBtn">No</button>
+<button id="yes" onclick="yesClick()">Yes</button>
+<button id="no" onclick="noClick()">No</button>
 
 <script>
 let step = 0;
 
-const messages = [
-  "Are you sure? 😢",
-  "Really sure?? 🥺",
-  "Think again... 😭",
-  "Last chance! 😤",
-  "Don’t break my heart 💔",
-  "I will ask again 😈",
-  "Still no?? 😡",
-  "Okay final final chance 😭",
-  "You cannot escape 😎",
-  "Say YES already ❤️"
-];
-
-const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
-const question = document.getElementById("question");
-
-noBtn.onclick = nextStep;
-
-// YES behaves like NO (hard to press)
-yesBtn.onclick = nextStep;
-
-function nextStep() {
-  if (step < messages.length) {
-    question.innerText = messages[step];
-
-    // Make YES bigger each time
-    let size = 12 + step * 6;
-    yesBtn.style.fontSize = size + "px";
-    yesBtn.style.padding = (5 + step * 3) + "px " + (10 + step * 5) + "px";
-
-    // Move YES randomly (hard to press)
-    yesBtn.style.position = "absolute";
-    yesBtn.style.top = Math.random() * 70 + "%";
-    yesBtn.style.left = Math.random() * 70 + "%";
-
+function noClick() {
     step++;
-  } else {
-    question.innerText = "YAYYYYY ❤️ She said YES 💍🎉";
-    yesBtn.style.display = "none";
-    noBtn.style.display = "none";
-    document.body.style.background = "#ffb3d9";
-  }
+
+    const questions = [
+        "Are you sure? 😢",
+        "Really sure? 🥺",
+        "Think again 💭",
+        "Last chance 😭",
+        "Still NO? 💔",
+        "Okay fine... one last time 😶"
+    ];
+
+    if (step < questions.length) {
+        document.getElementById("question").innerText = questions[step];
+        growYes();
+    } else {
+        // Remove NO button at final
+        document.getElementById("no").style.display = "none";
+        document.getElementById("question").innerText = "Final choice ❤️";
+        growYes();
+    }
+}
+
+function growYes() {
+    let yesBtn = document.getElementById("yes");
+    let currentSize = window.getComputedStyle(yesBtn).fontSize;
+    let newSize = parseFloat(currentSize) + 6;
+    yesBtn.style.fontSize = newSize + "px";
+}
+
+function yesClick() {
+    // FINAL POPUP (Valentine wishes)
+    document.body.innerHTML = `
+        <h1 style="color:#ff1a4d;">❤️ YAYYYYY ❤️</h1>
+        <h2>Happy Valentine's Day 💖</h2>
+        <p>You just made me the happiest person alive 😍</p>
+        <p>Forever starts now 💍✨</p>
+    `;
 }
 </script>
 
