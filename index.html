@@ -44,61 +44,61 @@ button{
 <button id="no">No</button>
 
 <script>
-let step = 0;
+let jumpCount = 0;
+let finalStage = false;
 
-/* YES jumps when clicked (before final) */
+/* YES jump function */
 function jumpYes(){
     const y = document.getElementById("yes");
-    y.style.position="absolute";
-    y.style.left=Math.random()*(window.innerWidth-120)+"px";
-    y.style.top =Math.random()*(window.innerHeight-120)+"px";
+    y.style.position = "absolute";
+    y.style.left = Math.random() * (window.innerWidth - 120) + "px";
+    y.style.top  = Math.random() * (window.innerHeight - 120) + "px";
 }
-
-/* NO click */
-document.getElementById("no").addEventListener("click", function(){
-
-    const msgs=[
-        "Are you sure? 😢",
-        "Really sure? 🥺",
-        "Think again 💭",
-        "Last chance 😭",
-        "Still NO? 💔",
-        "Final decision ❤️"
-    ];
-
-    if(step < msgs.length){
-        document.getElementById("question").innerText = msgs[step];
-        step++;
-    }else{
-        /* FINAL → BOTH buttons normal */
-        document.getElementById("question").innerText="Now choose carefully ❤️";
-
-        const y=document.getElementById("yes");
-        const n=document.getElementById("no");
-
-        y.style.position="static";
-        n.style.position="static";
-
-        y.style.fontSize="20px";
-        n.style.fontSize="20px";
-    }
-});
 
 /* YES click */
 document.getElementById("yes").addEventListener("click", function(){
 
-    if(step < 6){
-        jumpYes();   /* jump only before final */
+    if(!finalStage){
+
+        if(jumpCount < 10){
+            jumpYes();
+            jumpCount++;
+            return;
+        }
+
+        /* AFTER 10 JUMPS → FINAL STAGE */
+        finalStage = true;
+
+        document.getElementById("question").innerText =
+            "Now choose carefully ❤️";
+
+        const y = document.getElementById("yes");
+        const n = document.getElementById("no");
+
+        y.style.position = "static";
+        n.style.position = "static";
+
+        y.style.fontSize = "20px";
+        n.style.fontSize = "20px";
+
         return;
     }
 
     /* FINAL YES → popup */
-    document.body.innerHTML=`
+    document.body.innerHTML = `
         <h1 style="color:#ff1a4d;">❤️ SHE SAID YES ❤️</h1>
         <h2>Happy Valentine's Day 💖</h2>
         <p>You made me the happiest person alive 😍</p>
         <p>Forever starts now 💍✨</p>
     `;
+});
+
+/* NO click → does nothing (as requested) */
+document.getElementById("no").addEventListener("click", function(){
+    if(finalStage){
+        document.getElementById("question").innerText =
+            "Try again ❤️";
+    }
 });
 </script>
 
