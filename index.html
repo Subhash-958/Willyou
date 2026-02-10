@@ -19,12 +19,29 @@ body{
     color:white;
 }
 
+/* Background photo when final screen */
+.bgPhoto{
+    background:url("photo.jpg") no-repeat center center/cover !important;
+}
+
+/* Dark overlay for readability */
+.overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.35);
+    display:none;
+}
+
 /* Main box */
 .container{
     padding:20px;
+    position:relative;
+    z-index:2;
 }
 
-/* Buttons */
 button{
     border:none;
     padding:14px 28px;
@@ -32,23 +49,15 @@ button{
     font-size:18px;
     border-radius:8px;
     cursor:pointer;
-    transition:0.2s;
 }
 
-/* YES small initially */
 #yesBtn{
     background:#fff;
     color:#ff4d6d;
     font-size:10px;
 }
 
-/* NO normal */
-#noBtn{
-    background:#222;
-    color:#fff;
-}
-
-/* Popup screen */
+/* Popup */
 #popup{
     position:fixed;
     top:0;
@@ -61,18 +70,14 @@ button{
     align-items:center;
     text-align:center;
     padding:20px;
-}
-
-/* Popup image */
-#popup img{
-    width:220px;
-    border-radius:12px;
-    margin-bottom:20px;
+    z-index:5;
 }
 </style>
 </head>
 
 <body>
+
+<div class="overlay" id="overlay"></div>
 
 <div class="container" id="mainBox">
     <h1 id="question">Will you marry me?</h1>
@@ -80,14 +85,12 @@ button{
     <button id="noBtn">No</button>
 </div>
 
-<!-- Popup -->
 <div id="popup">
-    <div>
-        <img src="photo.jpg" alt="photo">
+    <div style="max-width:520px;">
         <h1>GOTCHA</h1>
         <h2>Relax... not today</h2>
 
-        <p style="max-width:500px;font-size:18px;">
+        <p style="font-size:20px; line-height:1.5;">
         This was just a tiny prank.<br><br>
         But remember this moment... because one day (maybe 2 years later)
         I might actually ask this for real.<br><br>
@@ -95,7 +98,10 @@ button{
         and keep making beautiful memories together.
         </p>
 
-        <p>Happy Valentine's Day</p>
+        <p style="margin-top:20px;">
+        Happy Valentine's Day<br>
+        You mean a lot to me
+        </p>
     </div>
 </div>
 
@@ -103,7 +109,6 @@ button{
 let yesCount = 0;
 let noIndex = 0;
 
-/* NO emotional series */
 const noSeries = [
 "Are you sure?",
 "Really sure?",
@@ -113,7 +118,6 @@ const noSeries = [
 "Okay... now final decision"
 ];
 
-/* YES jump positions */
 function moveYes(){
     const yesBtn = document.getElementById("yesBtn");
     const x = Math.random()*80;
@@ -123,47 +127,42 @@ function moveYes(){
     yesBtn.style.top=y+"vh";
 }
 
-/* YES click */
 document.getElementById("yesBtn").onclick=function(){
-
     yesCount++;
-    noIndex=0; // reset NO series
+    noIndex=0;
 
     if(yesCount < 10){
         moveYes();
-    }
-    else{
+    }else{
         finalChoice();
     }
 };
 
-/* NO click */
 document.getElementById("noBtn").onclick=function(){
-
-    yesCount=0; // reset YES series
+    yesCount=0;
 
     if(noIndex < noSeries.length){
         document.getElementById("question").innerText=noSeries[noIndex];
         noIndex++;
-    }
-    else{
+    }else{
         finalChoice();
     }
 };
 
-/* Final screen */
 function finalChoice(){
     document.getElementById("question").innerText="Now choose carefully";
-    const yesBtn=document.getElementById("yesBtn");
-    const noBtn=document.getElementById("noBtn");
 
+    const yesBtn=document.getElementById("yesBtn");
     yesBtn.style.position="static";
     yesBtn.style.fontSize="18px";
 
-    noBtn.style.display="inline-block";
+    /* SHOW PHOTO BACKGROUND */
+    document.body.classList.add("bgPhoto");
+    document.getElementById("overlay").style.display="block";
 
     yesBtn.onclick=function(){
         document.getElementById("mainBox").style.display="none";
+        document.getElementById("overlay").style.display="none";
         document.getElementById("popup").style.display="flex";
     };
 }
