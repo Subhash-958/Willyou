@@ -5,65 +5,66 @@
 <title>Will You Marry Me ❤️</title>
 
 <style>
-body {
-    text-align: center;
-    font-family: Arial, sans-serif;
-    background: #ffe6f0;
-    margin-top: 100px;
-    overflow: hidden;
+body{
+    text-align:center;
+    font-family:Arial, sans-serif;
+    background:#ffe6f0;
+    margin-top:100px;
+    overflow:hidden;
+}
+h1{font-size:36px;}
+
+button{
+    padding:12px 22px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
 }
 
-h1 {
-    font-size: 36px;
+/* YES tiny */
+#yes{
+    background:#ff4d6d;
+    color:white;
+    font-size:6px;
+    position:absolute;
 }
 
-button {
-    padding: 15px 25px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-#yes {
-    background: #ff4d6d;
-    color: white;
-    font-size: 5px;   /* VERY SMALL */
-    position: absolute;
-}
-
-#no {
-    background: #333;
-    color: white;
-    font-size: 30px;
+/* NO big */
+#no{
+    background:#333;
+    color:white;
+    font-size:28px;
 }
 </style>
 </head>
 
 <body>
 
-<h1 id="question">Will you marry me? ❤️</h1>
+<h1 id="q">Will you marry me? ❤️</h1>
 
 <button id="yes">Yes</button>
 <button id="no">No</button>
 
 <script>
 let step = 0;
-let moveInterval;
+let mover = null;
 
-// YES button jumping
-function moveYes() {
-    const yesBtn = document.getElementById("yes");
-    yesBtn.style.left = Math.random() * (window.innerWidth - 80) + "px";
-    yesBtn.style.top = Math.random() * (window.innerHeight - 80) + "px";
+/* Move YES randomly */
+function jumpYes(){
+    const y = document.getElementById("yes");
+    y.style.left = Math.random()*(window.innerWidth-80)+"px";
+    y.style.top  = Math.random()*(window.innerHeight-80)+"px";
 }
 
-// start jumping
-moveInterval = setInterval(moveYes, 800);
+/* Start jumping after page loads */
+window.onload = function(){
+    mover = setInterval(jumpYes, 700);
+};
 
-document.getElementById("no").onclick = function () {
-    step++;
+/* NO click */
+document.getElementById("no").addEventListener("click", function(){
 
-    const questions = [
+    const msgs = [
         "Are you sure? 😢",
         "Really sure? 🥺",
         "Think again 💭",
@@ -72,31 +73,33 @@ document.getElementById("no").onclick = function () {
         "Okay... final choice ❤️"
     ];
 
-    if (step < questions.length) {
-        document.getElementById("question").innerText = questions[step];
-    } else {
-        // FINAL STEP
-        document.getElementById("no").style.display = "none";
-        document.getElementById("question").innerText = "Only YES remains ❤️";
+    if(step < msgs.length){
+        document.getElementById("q").innerText = msgs[step];
+        step++;
+    }else{
+        /* FINAL */
+        document.getElementById("no").style.display="none";
+        document.getElementById("q").innerText="Only YES remains ❤️";
 
-        const yesBtn = document.getElementById("yes");
-        yesBtn.style.fontSize = "20px";
-        yesBtn.style.position = "static";
+        const y = document.getElementById("yes");
+        y.style.fontSize="20px";
+        y.style.position="static";
 
-        clearInterval(moveInterval); // stop jumping
+        clearInterval(mover);   /* STOP jumping */
     }
-};
+});
 
-document.getElementById("yes").onclick = function () {
-    if (step >= 6) {
+/* YES click */
+document.getElementById("yes").addEventListener("click", function(){
+    if(step >= 6){
         document.body.innerHTML = `
-            <h1 style="color:#ff1a4d;">❤️ SHE SAID YES ❤️</h1>
-            <h2>Happy Valentine's Day 💖</h2>
-            <p>You made me the happiest person alive 😍</p>
-            <p>Forever starts now 💍✨</p>
+        <h1 style="color:#ff1a4d;">❤️ SHE SAID YES ❤️</h1>
+        <h2>Happy Valentine's Day 💖</h2>
+        <p>You made me the happiest person alive 😍</p>
+        <p>Forever starts now 💍✨</p>
         `;
     }
-};
+});
 </script>
 
 </body>
