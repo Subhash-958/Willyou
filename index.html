@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Important Question 😌</title>
+<title>Important Question ❤️</title>
 
 <style>
 body{
@@ -11,15 +11,26 @@ body{
   background: linear-gradient(120deg,#ffdde1,#ee9ca7);
   height:100vh;
   margin:0;
+  overflow:hidden;
+  transition:0.6s;
+}
+
+/* Fade */
+.fade{ animation:fadeIn 0.6s ease; }
+@keyframes fadeIn{
+ from{opacity:0; transform:scale(0.96);}
+ to{opacity:1; transform:scale(1);}
 }
 
 h1{
   margin-top:80px;
-  font-size:30px;
+  font-size:32px;
+  color:#fff;
+  text-shadow:0 2px 8px rgba(0,0,0,0.3);
 }
 
 button{
-  padding:12px 24px;
+  padding:12px 26px;
   font-size:18px;
   border:none;
   border-radius:8px;
@@ -30,6 +41,7 @@ button{
 #yesBtn{ background:#4CAF50; color:white; }
 #noBtn{ background:#f44336; color:white; }
 
+/* Popup */
 #popup{
   display:none;
   position:fixed;
@@ -38,120 +50,159 @@ button{
   transform:translate(-50%,-50%);
   background:white;
   padding:30px;
-  border-radius:12px;
-  box-shadow:0 0 20px rgba(0,0,0,0.3);
-  max-width:350px;
+  border-radius:14px;
+  box-shadow:0 0 30px rgba(0,0,0,0.35);
+  max-width:380px;
+}
+
+/* Hearts */
+.heart{
+  position:fixed;
+  color:#ff4d6d;
+  font-size:18px;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  0%{transform:translateY(-10vh);}
+  100%{transform:translateY(110vh);}
 }
 </style>
 </head>
 
-<body>
+<body class="fade">
 
 <h1 id="question">Will you marry me? ❤️</h1>
 
 <button id="yesBtn" onclick="yesClick()">Yes</button>
 <button id="noBtn" onclick="noClick()">No</button>
 
-<!-- POPUP (hidden initially) -->
 <div id="popup">
 <h2>😄 GOTCHA ❤️</h2>
-
-<p style="font-size:18px; line-height:1.6;">
-Relax... not today 😌<br><br>
-
-This was just a tiny prank 😄<br>
-But remember this moment... because <b>one day (maybe 2 years later 😉)</b><br>
-I might actually ask this for real 💍<br><br>
-
-Until then… just stay with me, laugh with me,<br>
-and keep making beautiful memories together ❤️<br><br>
-
-<b>Happy Valentine's Day 💖</b><br>
-You mean a lot to me ✨
-</p>
-
+<p id="popupText" style="font-size:18px; line-height:1.6;"></p>
 <button onclick="closePopup()">Close</button>
 </div>
 
+<audio id="bgMusic" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_6c5d0c1e9b.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 
-let yesCount = 0;
-let noIndex = 0;
-let jumpCount = 0;
-let finalStage = false;
+let yesCount=0,noIndex=0,jumpCount=0,finalStage=false,musicStarted=false;
 
-const noTexts = [
-  "Are you sure? 😢",
-  "Really sure? 🥺",
-  "Think again 💭",
-  "Last chance 😭",
-  "Still NO? 💔",
-  "Okay... now final decision 😏"
+const noTexts=[
+"Are you sure? 😢",
+"Really sure? 🥺",
+"Think again 💭",
+"Last chance 😭",
+"Still NO? 💔",
+"Okay... now final decision 😏"
 ];
 
+const finalMessage=`Relax... not today 😌
+
+This was just a tiny prank 😄
+But remember this moment... because one day (maybe 2 years later 😉)
+I might actually ask this for real 💍
+
+Until then… stay with me, laugh with me,
+and keep making beautiful memories together ❤️
+
+Happy Valentine's Day 💖
+You mean a lot to me ✨`;
+
+function startMusic(){
+ if(!musicStarted){
+  document.getElementById("bgMusic").play().catch(()=>{});
+  musicStarted=true;
+ }
+}
+
 function randomMove(btn){
-  let x = Math.random() * (window.innerWidth - 120);
-  let y = Math.random() * (window.innerHeight - 120);
-  btn.style.position="absolute";
-  btn.style.left = x+"px";
-  btn.style.top = y+"px";
+ let x=Math.random()*(window.innerWidth-120);
+ let y=Math.random()*(window.innerHeight-120);
+ btn.style.position="absolute";
+ btn.style.left=x+"px";
+ btn.style.top=y+"px";
 }
 
 function yesClick(){
+ startMusic();
 
-  if(finalStage){
-    showPopup();
-    return;
-  }
+ if(finalStage){ showPopup(); return; }
 
-  yesCount++;
-  noIndex = 0;
+ // 😈 Fake confusion 20% chance
+ if(Math.random()<0.2){
+  document.getElementById("question").innerHTML="Wait... did you press NO? 😏";
+ }
 
-  if(jumpCount < 10){
-    randomMove(document.getElementById("yesBtn"));
-    jumpCount++;
-  }
+ yesCount++; noIndex=0;
 
-  if(yesCount >= 10){
-    showPopup();
-  }
+ if(jumpCount<10){
+  randomMove(document.getElementById("yesBtn"));
+  jumpCount++;
+ }
+
+ if(yesCount>=10) showPopup();
 }
 
 function noClick(){
+ startMusic();
+ if(finalStage) return;
 
-  if(finalStage) return;
+ yesCount=0;
 
-  yesCount = 0;
-
-  if(noIndex < noTexts.length){
-    document.getElementById("question").innerHTML = noTexts[noIndex];
-    noIndex++;
-  } 
-  else{
-    goFinal();
-  }
+ if(noIndex<noTexts.length){
+  document.getElementById("question").innerHTML=noTexts[noIndex];
+  noIndex++;
+ }else goFinal();
 }
 
 function goFinal(){
-  finalStage = true;
-  document.getElementById("question").innerHTML = "Now choose carefully 😏";
-
-  let yes = document.getElementById("yesBtn");
-  let no = document.getElementById("noBtn");
-
-  yes.style.position="static";
-  no.style.position="static";
+ finalStage=true;
+ document.getElementById("question").innerHTML="Now choose carefully 😏";
+ yesBtn.style.position="static";
+ noBtn.style.position="static";
 }
 
 function showPopup(){
-  document.getElementById("popup").style.display="block";
+ document.getElementById("popup").style.display="block";
+ typeText();
+ createHearts();
 }
 
 function closePopup(){
-  document.getElementById("popup").style.display="none";
+ document.getElementById("popup").style.display="none";
+}
+
+function typeText(){
+ let i=0;
+ let speed=30;
+ let text=finalMessage;
+ let target=document.getElementById("popupText");
+ target.innerHTML="";
+
+ function typing(){
+  if(i<text.length){
+   target.innerHTML+=text.charAt(i);
+   i++;
+   setTimeout(typing,speed);
+  }
+ }
+ typing();
+}
+
+function createHearts(){
+ for(let i=0;i<30;i++){
+  let heart=document.createElement("div");
+  heart.className="heart";
+  heart.innerHTML="💖";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.animationDuration=(3+Math.random()*3)+"s";
+  document.body.appendChild(heart);
+ }
 }
 
 </script>
-
 </body>
 </html>
